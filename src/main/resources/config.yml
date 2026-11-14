@@ -1,0 +1,36 @@
+terrain:
+  surface: GRASS_BLOCK
+  subsurface: DIRT
+  subsurface-depth: 4
+  foundation: STONE
+  default-bottom-y: 0
+generation:
+  smoothing: 70
+  resolution: 1
+  noise: 0
+  max-area: 1000000
+  require-confirmation: true
+  max-blocks: 50000000
+  max-memory-mb: 256
+  max-points: 512
+  max-hills: 128
+  confirmation-seconds: 120
+  clear-above: false
+  # Only used when clear-above is enabled; never clears beyond this height.
+  clear-to-y: 120
+preview:
+  enabled: true
+  particles: true
+  show-boundary: true
+  show-mesh: true
+  show-control-points: true
+  particle-budget: 500
+  duration-seconds: 60
+protection:
+  enabled: true
+  never-overwrite:
+    - STONE_BRICKS
+    - DEEPSLATE_TILES
+    - BLACK_CONCRETE
+messages:
+  prefix: "<dark_gray>[<green>TerrainMesh<dark_gray>] "

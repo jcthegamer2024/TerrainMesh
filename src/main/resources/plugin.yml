@@ -1,0 +1,20 @@
+name: TerrainMesh
+version: '${version}'
+main: org.sylvarion.terrainmesh.TerrainMeshPlugin
+api-version: '26.3'
+depend: [FastAsyncWorldEdit]
+commands:
+  terrainmesh:
+    description: Constrained polygon terrain generation
+    aliases: [tm]
+    permission: terrainmesh.use
+permissions:
+  terrainmesh.use:
+    default: op
+  terrainmesh.generate:
+    default: op
+  terrainmesh.admin:
+    default: op
+    children:
+      terrainmesh.use: true
+      terrainmesh.generate: true
