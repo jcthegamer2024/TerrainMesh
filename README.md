@@ -1,10 +1,12 @@
 # TerrainMesh
 
-**0.1 BETA — potentially unstable.** This is an early testing release; bugs and partial edits are possible. Test on a staging server and back up your world before large edits.
+**0.2 BETA testing status:** The preview particle changes have **not been checked in-game yet**. Compilation and the 14 automated tests pass, but distant visibility and appearance still need in-game verification. This update adds long-distance particles, a configurable 512-block default range, and markers that grow with distance, while keeping the particle budget unchanged.
+
+**0.2 BETA — potentially unstable.** This is an early testing release; bugs and partial edits are possible. Test on a staging server and back up your world before large edits.
 
 Generate solid, grass-covered terrain inside a perimeter you select in Minecraft. Fill empty spaces between roads, connect edges at different elevations, or add optional hills. Preview first, confirm to build, and undo through FAWE.
 
-[Download 0.1 BETA](https://github.com/jcthegamer2024/TerrainMesh/releases/tag/v0.1-BETA) · [Report a bug](https://github.com/jcthegamer2024/TerrainMesh/issues)
+[Download 0.2 BETA](https://github.com/jcthegamer2024/TerrainMesh/releases/tag/v0.2-BETA) · [Report a bug](https://github.com/jcthegamer2024/TerrainMesh/issues)
 
 Solid polygon terrain for **Paper 26.3**, **Java 25**, and **FastAsyncWorldEdit 2.16.2**. Gradle 9.7.0 is supplied through the wrapper. Java 25 is the minimum for the selected Paper API; Java 21 cannot compile or run this target.
 
@@ -108,6 +110,21 @@ Noise defaults to zero and fades out near the boundary and hill controls. The sa
 
 Large previews are deliberately sampled and capped; a gap between particles is not a gap in the final solid fill. Selection particles can remain after a preview ends because your point selection remains active.
 
+### Seeing large selections from a distance
+
+Preview and selection particles use long-distance delivery by default, with a 512-block viewing radius. Markers grow with distance up to Minecraft's maximum dust size. Only the selecting player receives them; the default budget remains 500 particles per second per player.
+
+Administrators can adjust these settings in `plugins/TerrainMesh/config.yml`, then restart:
+
+```yaml
+preview:
+  force-particles: true
+  max-distance: 512
+  particle-size: 2.5
+```
+
+`max-distance` accepts 32–2048 blocks; `particle-size` accepts 0.5–4.0. These defaults also apply to existing configs that lack the new keys. Long-distance delivery improves visibility but does not guarantee that particles render beyond your client's view distance or through obstacles. Try a higher view distance and fly above the area for an overview. Particles do not load chunks. See [Paper's long-distance particle documentation](https://jd.papermc.io/paper/26.3/com/destroystokyo/paper/ParticleBuilder.html#force(boolean)).
+
 | Problem | What to do |
 | --- | --- |
 | FAWE says `Invalid value for Mask` after `/tm wand` | Use `/terrainmesh wand`; `/tm` conflicts with FAWE. |
@@ -126,7 +143,7 @@ Large previews are deliberately sampled and capped; a gap between particles is n
 .\gradlew.bat clean build
 ```
 
-Download `TerrainMesh-0.1-BETA.jar` from the prerelease above, or build it locally at `build/libs/TerrainMesh-0.1-BETA.jar`. Copy it to your Paper server's `plugins` directory alongside FastAsyncWorldEdit. Restart the server. FAWE is required and loads before TerrainMesh. JTS 1.20.0 is included in the plugin JAR; Paper and FAWE are compile-only dependencies and are not bundled. Dependencies are pinned for reproducible builds. Configure `plugins/TerrainMesh/config.yml`, then restart to apply changes.
+Download `TerrainMesh-0.2-BETA.jar` from the prerelease above, or build it locally at `build/libs/TerrainMesh-0.2-BETA.jar`. Copy it to your Paper server's `plugins` directory alongside FastAsyncWorldEdit. Restart the server. FAWE is required and loads before TerrainMesh. JTS 1.20.0 is included in the plugin JAR; Paper and FAWE are compile-only dependencies and are not bundled. Dependencies are pinned for reproducible builds. Configure `plugins/TerrainMesh/config.yml`, then restart to apply changes.
 
 For local development, run `.\gradlew.bat runServer` (or `./gradlew runServer`). The task automatically downloads the official FAWE 2.16.2 Paper release from GitHub and loads it alongside the built TerrainMesh plugin. Server files are kept in the ignored `run/` directory.
 

@@ -25,6 +25,11 @@ preview:
   show-mesh: true
   show-control-points: true
   particle-budget: 500
+  # Force long-distance particles for the selecting player only; client render limits still apply.
+  force-particles: true
+  max-distance: 512
+  # Dust size near the player; increases with distance to a maximum of 4.0.
+  particle-size: 2.5
   duration-seconds: 60
 protection:
   enabled: true

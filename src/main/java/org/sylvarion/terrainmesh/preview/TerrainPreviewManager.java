@@ -67,8 +67,18 @@ public final class TerrainPreviewManager {
         for(int i=0;i<budget;i++)out.add(dots.get((int)((long)i*dots.size()/budget)));return out;
     }
     private void draw(Player player,List<Dot> dots) {
-        for(var d:dots) if(player.getLocation().distanceSquared(new Location(player.getWorld(),d.x,d.y,d.z))<192*192)
-            player.spawnParticle(Particle.DUST,d.x,d.y,d.z,1,0,0,0,0,new Particle.DustOptions(d.color,1.2f));
+        var settings=plugin.settings();
+        Location viewer=player.getEyeLocation();
+        double maxDistanceSquared=(double)settings.previewDistance*settings.previewDistance;
+        for(var d:dots) {
+            double dx=viewer.getX()-d.x,dy=viewer.getY()-d.y,dz=viewer.getZ()-d.z;
+            double distanceSquared=dx*dx+dy*dy+dz*dz;
+            if(distanceSquared>maxDistanceSquared) continue;
+            // Scale markers up with distance, bounded by Minecraft's maximum dust size.
+            float size=(float)Math.min(4,settings.particleSize*(1+Math.sqrt(distanceSquared)/128));
+            player.spawnParticle(Particle.DUST,d.x,d.y,d.z,1,0,0,0,0,
+                    new Particle.DustOptions(d.color,size),settings.forceParticles);
+        }
     }
     public void close() {task.cancel();previews.clear();}
 }
